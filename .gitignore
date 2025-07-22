@@ -1,0 +1,30 @@
+# Flutter build outputs
+build/
+.dart_tool/
+.packages
+pubspec.lock
+
+# Android
+android/.gradle/
+android/app/build/
+*.jks
+*.keystore
+local.properties
+
+# iOS/macOS (ignore if you're not building for iOS/macOS)
+ios/Flutter/
+ios/Pods/
+ios/build/
+macos/Flutter/
+macos/Pods/
+macos/build/
+
+# IDEs
+.vscode/
+.idea/
+
+# Others
+*.iml
+*.apk
+*.ipa
+*.lock
