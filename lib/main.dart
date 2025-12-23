@@ -1,32 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'core/theme/app_theme.dart';
-import 'core/providers/auth_provider.dart';
-import 'core/providers/user_provider.dart';
-import 'core/providers/workout_provider.dart';
-import 'pages/login_page.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'app.dart';
 
-void main() {
-  runApp(const AthleniQApp());
-}
-
-class AthleniQApp extends StatelessWidget {
-  const AthleniQApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => UserProvider()),
-        ChangeNotifierProvider(create: (_) => WorkoutProvider()),
-      ],
-      child: MaterialApp(
-        title: 'AthleniQ',
-        theme: AppTheme.lightTheme,
-        debugShowCheckedModeBanner: false,
-        home: const LoginPage(),
-      ),
-    );
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Set preferred orientations
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  
+  // Set system UI overlay style
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+    ),
+  );
+  
+  // Initialize Firebase
+  try {
+    await Firebase.initializeApp();
+  } catch (e) {
+    debugPrint('Firebase initialization failed: $e');
+    // Continue without Firebase for development
   }
+  
+  runApp(
+    const ProviderScope(
+      child: AthleniQApp(),
+    ),
+  );
 }
